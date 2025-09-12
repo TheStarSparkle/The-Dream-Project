@@ -1,0 +1,253 @@
+Resumen Ejecutivo
+
+El objetivo de esta seccion es describir los riesgos de seguridad relevantes
+para The Dream Project, modelar a los adversarios y vectores de ataque, y proponer
+controlas tecnicos y organizativos concretos, medibles y auditables.
+La seguridad no es solo tecnologia, es gobernanza, procesos, pruebas
+y transparencia. En especial damos prioridad a: (1) integridad y privacidad del proceso
+de votación, (2) integridad de modelos IA y pipelines de datos, (3) resiliencia ante
+ataques dirigidos (supply chain, insiders, estados), y (4), capacidad de 
+deteccion, contención y recuperación. Las lecciones despliegues 
+previos de votacion movil y ataques a la cadena de suministros demuestran
+que confiar en soluciones opacas sin auditoria publica es peligroso.
+
+Activos Criticos (Lo que se debe proteger)
+
+1.- Integridad del voto — boletas, conteos, y resultados electorales
+2.- Privacidad del votante — anonimato y datos personales.
+3.- Modelos de IA y pesos — codigo y pesos entrenados que toman
+decisiones operativas.
+4.- Datos de entrada — sensores, estadisticas, reportes ciudadanos (lineage y
+autenticidad).
+5.- Infraestructura de control — nodos, validatos, bulletin borads
+y smart contracts.
+6.- Keys y credenciales — claves privadas de trustees, firmas de
+actualizaciones, certificados.
+7.- Canales de gobernanza humanana — comites, logs de decision y procesos de
+upgrade
+8.- Reputacion y confainza publica — Esto es valioso y fragil a la vez; una sola falla
+puede destruir legitimidad.
+
+Adversarios (Threat actors)
+
+Actores estatales (nation—state APTs): recursos y tiempo ilimitado,
+objetivos estrategicos.
+
+Carteles/organizaciones criminales/terroristas: motivados por lucro (compra de votos,
+manipulacion).
+
+Hacktivistas: Buscan desinformacion o daño reputacional.
+
+Insiders maliciosos: desarrolladores, operadores o trustees con
+acceso privilegiado.
+
+Proveedores/terceros compromotidos: ataques por la cadena de suministro
+(update packages, librerias).
+
+Atacantes ML (researches/mercenarios): intentan envenenar datos, robar modelos
+o explotar sesgos.
+
+Usuarios y coercion organizada: Actores que compran/coaccionan votos
+por medios fisicos o digitales.
+
+Vectores de ataques principales
+
+1.- Supply-chain (software/firmware)— inyeccion de codigo malicioso
+en librerias, CI/CD o actualizaciones (leccion SolarWinds).
+
+2.- Compromiso de dispositivos de votacion — malware en clientes
+moviles/desktops que cambia bpñetas o roba claves (ejemplos en 
+auditorias de voting apps).
+
+3.- Ataques a la integridad de datos / data poisoning — 
+envenenamiento de datasets de entrenamiento o de sensores (afectar
+decisiones IA).
+
+4.- Adversarial examples y evasion ML — entradas de manipuladas
+que causan desiciones erroneas de modelos.
+
+5.- Robo / exposicion de claves privadas — extraccion de llaves
+de trustees, validadores o enclaves.
+
+6.- Ataques a la cadena de vonseso / ledger —
+censura de transacciones, ataques 51% (Definicion de ataque 51%: Es un tipo de ataque donde
+un individuo o grupo controla mas del 50% del poder de computo total de la red,
+permitiendole manipular la cadena de bloques).
+
+7.- Exfiltracion y correlacion de informacion — re-identidificacion de votantes
+a partir de metadata o logs.
+
+8.-Manipulacion politica y adversarial social (disinfo) 
+campañas que explotan fallos de transparencia o confusion sobre ideologias.
+
+9.- Denegacion de servicio y sabotaje — sobrecarga de nodos, o actos
+fisicos contra infraestructura critica.
+
+Threat Modelling (Ejemplos concretos de escenarios)
+
+Escenario A: Campaing supply-chain—APT compromete una
+libreria de analytics usada por el sistema y introduce backdoord que
+exfiltra claves y manipula tallies. (Impacto: compromiso masivo de 
+integridad y confidencialidad). Leccion: Solar Winds y posteriores ataques
+demuestran que la confianza en actualizaciones automaticas sin SBOM y 
+verificacion es peligrosa.
+
+Escenario B: Posining de datos ciudadanos— grupos organizados
+envian datos falsos de sensores o encuestras para sesgar modelos
+que estiman bienestar publico; IA optimiza politicas dañonas por Goodhart. (Impacto
+politicas equivocadas con efectos sociales).
+
+
+Escenario C: Malware en cliente movil — cliente de votacion movil
+en dispositivo infectado altera boleta antes del cifrado o envia
+copia a tercer servidor. (Impacto: perdida de privacidad e integridad).
+Historicamente, apps de votacion han fallado ante auditorias independientementes.
+
+Controles de mitigacion — arquitectura y practicas (tecnicas y organizativas)
+
+Gobernanza y proceso
+
+Segregacion roles y separacion de privilegios: operators, devs
+trustees, auditores, y comites eticos deben tener roles y llaves
+separadas con least privilege.
+
+Politica de cambios (change control): actualizaciones solo con quórum humano predefinido,
+pruebas canary y ventanas de revision publicas.
+
+Auditoria externa e independencia: auditorias regulares por terceros
+)externos y multi-juridsdiccionales) con acceso a logs y codigo.
+
+Plan de transparencia: Publicar SBOM (Software bill of material).
+
+Programa de gestion de proveedores: Evaluacion de seguridad de
+terceros, contratos con clausulas de responsabilidad, y revisiones
+continuas.
+
+
+Seguridad de software e infraestructora
+
+Secure SDLC + CI/CD hardened: signing de artefactos, reproducible builds,
+escaneo SCA (Software Composition Analysis), escaneo de imagenes y pruebas SBOM.
+(Mitiga supply-chain).
+
+Signature + attestation de modelos y binarios: todo modelo y 
+binario debe ser dimado; despliegue solo si la firma y attestaion
+coinciden.
+
+Trusted Execution Environments (TEEs) / enclaves para procesar
+cargas sensibles (clave: entender limitaciones y combinar con otras
+defensas).
+
+Key manegent y HSMs: claves privadas de trustees en HSM o 
+MPC; rotacion periodica y separacion de custodia.
+
+Network segmentation y zero-trust: segmentar redes de votación,
+modelos y datos; control estricto de acceso y monitoreo continuo.
+
+Inmutable audit trail: logs firmados y append-only (ledger)
+con retencion para forense y auditoria.
+
+
+Seguridad de IA y datos
+
+Data provenance y lineage: firmar e insertar metadatos de origen;
+negar uso de datos sin verificacion.
+
+Defensa contra envenenamiento: validacion estadistica, hold-out sets,
+anomaly detection y test suites adversariales antes de aceptar datos nuevos.
+
+Robustness testing: Adversarial training, pruebas de evasion y stess
+test periodicos. (Definicion de adversarial training: Tecnica de aprendizaje
+automatico que se utiliza normalmente para mejorar la robustez de modelos, es un proceso
+en el que los modelos se entrenan con entradas maliciosas combinado con
+datos genuinos).
+
+Differential privacy para liberacion de estadisticas: limitar exposicion
+y riesgos de re-identificacion. (Definicion de differential privacy: Es un sistema y un estandar
+estadistico que protege la identidad de los individuos en un conjunto de datos al introducir ruido aleatorio
+controlado)
+
+Model Governance: versionado, model cards, test de fairness, y perfomance,
+canary deploymentes, y rollback automaticos.
+
+
+Deteccion, monitoreo y respuesta
+
+Telemetria y detección:
+
+Monitorizacion continua: integridad de artefactos, anomalias
+en trafico, metricas de perfomance y comportamientos de modelos.
+
+IDS/IPS y EDR: Deteccion en endpoints y servidores, integradas con logs
+centralizados.
+
+ML-based anomaly detection: modelos que detectan desviaciones
+en politicas propuestas por IAs, patrones inusiales en votos/sensores
+
+
+Playbook de incidente (alto nivel — plantilla) (Definicion de playbook:
+Es una guia practica que detalla estrategias, procesos y acciones para
+alcanzar algo en especifico).
+
+Deteccion / Triage
+clasificar: confidencialidad, integridad, disponibilidad,
+impacto electoral
+
+Contencion inmediata
+aislar nodos afectados, desconexion de red, revocar llaves comprometidas
+temporariamente.
+
+Preservacion de evidencia
+Snapshot de sistemas, exportacion de logs firmados, cadena de custodia.
+
+Comunicacion 
+Notificacion a comite de crisis, autoridades, auditorse externos y publico
+segun politicas (transparencia controlada).
+
+Erradicacion
+Remover la causa de raiz (parches, rollback de despliegue, reemplazo de binaries/modelos)
+
+Recuperacion 
+Restaurar desde artefactos firmados y validades re-calculo
+de tallies si es necesario con pruebas publicas.
+
+Post-mortem y reparacion
+Informe publico con lecciones, ajsutes en controles y
+actualizacion de playbooks.
+
+
+Testing, validación y auditoría
+
+Red-team permanente: equipo interno + contratos con terceras partes para simulacros (supply-chain, client compromise, enrollments).
+(Definicion de red-team: Es cuando un equipo de expertos busca vulnerabilidades en 
+una estrategia).
+Bug-bounty público y open-source parts: incentivos para encontrar vulnerabilidades.
+(Definicion de bug bounty: Es cuando se hace un programa donde se invita a hackers eticos
+o expertos de ciberseguridad a encontrar y reportar vulnerabilidades en un sistema a cambio
+de recompensas).
+Pen-tests regulares y pruebas de fuzzing: en todos los componentes expuestos.
+(Definicion de pen-tests: Son ataques simulados a un sistema informatico con el objetivo
+de detectar y explotar vulnerabilidades antes de que un atacante real lo haga. Definicion
+de pruebas fuzzing: Es una tecnica de control de calidad y seguridad del
+software que consiste en la inyeccion automatica de grandes volumenes de datos aleatorios,
+, malformados o inesperados en un sistema para asi poder descubrir vulnerabilidades, errores
+de codificacion y fallos).
+Evaluaciones de impacto en derechos humanos (HRIA) y de privacidad antes de cada piloto.
+
+Pruebas de reproducibilidad de modelos y builds reproducibles: todo 
+artefacto que entre en producción debe poder recrearse desde código fuente y dataset versionado.
+
+
+
+Anexo: mini-playbook
+
+Detectado posible uso no autorizado de llave trustee.
+
+Inmediato: poner en modo read-only el ledger, levantar snapshot en storage seguro.
+
+Ejecutar rotación de llave: emitir nuevo set de trustees (pre-configurado en un trust-store), 
+revocar llaves comprometidas, y firmar el cambio con multisig de emergencia.
+
+Validación: auditores externos verifican integridad de tallies publicados; si hay dudas sobre integridad de conteo, ejecutar conteo alternativo desde artefactos cifrados y pruebas ZK.
+
+Publicación de incidente y medidas (según política de transparencia).
