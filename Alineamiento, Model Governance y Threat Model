@@ -1,0 +1,313 @@
+Resumen ejecutivo:
+
+El objetivo de este archivo es garantizar que las IAs de este sistema operen de forma
+segura, alinieada con los valores definidos por derechos humanos y robustos controles técnicos
+organizacionales y legales. Cubrire: Principios de alineamiento; especificación de objetivos; entrenamiento,
+validación y despliegue seguros; gobernanza de modelos; operaciones continuas (MLOps/Alops); auditoria y
+transparencia; y respuesta a incidentes.
+
+Principios Rectores: 
+
+1.- Las decisiones éticas, diplomáticas y 
+humanitarias requieren revisión y consentimiento humano definido por roles y procesos.
+
+2.- Transparencia proporcional: Publicar documentacion técnica (model cards
+datasheets, changelogs) y niveles de transparencia apropiados 
+según riesgo. (Definicion de model cards: documentos breves que
+contienen modelos de aprendizaje automatico que eexplican el contexto
+en el que se pretende utilizar, los detalles de los procedimientos
+de evaluacion del rendimiento, y otra informacion importante. Definicion de
+datasheets: Es un documento que contiene informacion sobre las caracteristicas
+y especificaciones sobre un producto, componente, proceso o serviciom elaborado
+generalmente por el fabricante, o proveedor. Definicion de changelog: 
+Es un documento que registra y detalla los cambios realizados en un proyecto
+como software o una aplicacion, de forma cronologica y por 
+versiones).
+
+3.- Minimizar daños: Cualquier optimización de las IAs deben 
+de priorizar daños previsibles (principio precautorio)
+
+4.- Responsabilidad y trazabilidad: Cada modelo, dato y decisión debe ser trazable 
+a actores responsables.
+
+5.- Equidad y no discriminación: Los modelos deben ser evaluados y 
+corregidos frente a impactos desiguales.
+
+6.- Resilencia y reversibilidad: Capacidad de detener, revertir o al menos degradar modelos que
+se comporten mal (que actuen fuera de sus lineamentos, 
+en otras palabras).
+
+
+1.- Especificación y alineamento de objetivos
+
+El problema: 
+Objetivos mal especificados o metricas simplistas (Goodhart) hatan que la IA "cumpla los objetivos" de
+forma indeseadas.
+
+Requisitos
+
+Declaracion formal de objetivos: Por cada IA, un documento que describa detalladamente su proposito, 
+sus inputs, outputs, metricas primarias y restricciones de seguridad.
+
+Indicadores compuestos (multi-objective): Evitar una unica métrica. Se diseñara un vector de objetivos
+(Por ejemplo: Seguridad, equidad, eficiencia, bienestar) y reglas de prioridad.
+
+Constraints hard/soft: Definir restricciones invariantes (hard constraints) que nunca se violan bajo ninguna
+circunstancia (Por ejemplo: "No discriminar por X", "No cortan acceso a servicios de emergencia"), y objetivos secundarios
+optimizables.
+
+Reward modeling supervisado por humanos: Para modelos que aprenden objetivos
+a partir de preferencia humana, usar colecciones de comparaciones humanas, 
+evaluaciones multiculturales y paneles diversificados.
+
+Simulacion & stress tests: evaluar especificaciones en entornos 
+simulados para detectar comportamientos emergentes.
+
+
+Ciclo de vida del modelo (Model Governance) 
+Incluye: Diseño, dataset, entrenamiento, validación, despliegue, monitorización y retirada.
+
+Documentacion obligatoria (por modelo)
+
+Model Card: Propósito, arquitectura, capacidades, limitaciones, versiom
+fecha, autores, dataset summary.
+
+Datasheet (dataset provenance): origen de datos, consentimientos, limpieza, etiquetado, represantatividad
+transformaciones, privacy epsilon (si aplica).
+
+Changelog & Audit Log: registro inmutable de entrenamientos, parametros, semillas, 
+checkpointes y despliegues.
+
+Risk Assesment: HRIA (Human Rigts Impact Assesment) y Threat Model asociado.
+
+Controles Técnicos de entrenamiento
+
+Gestion de datos: Pipelines reproducibles, versionado de datasets (data
+lineage), tests de calidad y anonimizacion/differential privacy cuando se aplique.
+
+Robustez al poisoning y data drift: pipelines para deteccion de anomalías en datos de entrenamiento
+y mecanismos de cuarentena. (Definicion de pipeline: Es un proceso secuencial y configurable con multiples
+etapas que, de forma analoga a una tuberia, mueve y transforma información o datos para alcanzar un objetivo especifico
+. Definicion de data drift: Es el fenomeno en el que las propiedades estadisticas de datos de entradas
+utilizados para entrenar un modelo de aprendizaje automatico cambian con el tiempo).
+
+
+Privacidad en entrenamiento: Aplicar DP-SGD u otros métodos de differencial privacy en datasets sensibles;
+documentar epsilon. (Definicion de DP-SGD: Consiste en modicar los gradientes utilizados en el descenso de gradiente estocastico (SGD), que constituye
+la base de algoritsmos de aprendizaje profundo. 
+Definicion de differencial privacy: Es un estandar para calculos de datos que limita la informacion personal que un resultado
+puede revelar sobre un individuo, permitiendo el analisis de grupos sin exponer detalles individuales, incluso en presencia de riesgos de reidentificacion).
+
+Control de supply chain: Firmar y veridicar arteFactos (depedencias, librerias, weights) y revisar terceros.
+
+Reproducibilidad: Se gaurdaran seeds, config files, entorno y contenedores.
+
+
+Validacion & pruebas pre-despliegue
+
+Battery de test:
+Funcionales (correctitud, calibracion)
+Seguridad (adversarial robustness, prompt-injection tests. Definicion de
+prompt-injections: Es cuando un modelo de aprendizaje profundo acepta informacion de fuentes externas.
+El contenido puedde contener datos externos que, al ser interpretados por el modelo,
+alteran su comportamiento de forma inesperada).
+Equidad (testing por subgrupos).
+Privacidad (membership inference, model inversion checks).
+Simulated misuse/ red-team (casos de abuso).
+
+Shadow deployments y canary releases: Probar en paralelo con trafico real 
+pero sin efectos, luego canary (Definicion de despliegue canary: Es una estrategia de lanzamiento gradual
+que envia una nueva version de algo a un pequeño subconjunto de usuarios o servidores antes de implementarla
+por completo, para identificar y mitigar problemas en un entorno controlado) con fraccion pequeña antes de despliegue completo.
+
+Approval gates: Despliegue a una produccion requiere aprobaciones multi-party (tecnica, etica, legal). Para
+cambios criticos, usar thereshold signing (por ejemplo 3 de 5 firmantes).
+
+Despliegue seguro y operacion continua
+
+Arquitectura Operativa:
+
+Segragacion de ambientes: dev/test/staging/prod con controles y datos separados.
+
+Trusted Execution: para componentes sensibles, usar enclaves (TEEs) o infra segura y firmada.
+
+Control de acceso y roles (RBAC / ABAC): permisos minimos y separacion de funciones (desarrollador vs operador 
+vs auditor).
+
+Versioning & rollback: cada deployment ligado a un identificador; 
+posibilidad inmediata de rollback a version anterior conocida.
+
+Monitorizacion y detección
+
+Metric buckets:
+
+Perfomance: latencia, throughput, error rate. (Definicion de error rate: Es una medida que cuantifica
+la proporcion de resultados erroneos con respectos al numero total de intentos o eventos 
+en un sistema, proceso o modelo. Definicion de throughput: Se refiere a la cantidad de trabajo, datos o producto que
+un sistema puede procesar o entregar en un periodo de tiempo determinado).
+
+Alignment signal: Fraccion de outputs que violan constraints, score de toxicidad, tasa
+de fallback a humano. (Definicion de constraints, o restriccion, en español, es algo que controla lo que se puede hacer al mantenerlo 
+dentro de ciertos limites o reglas. 
+Definicion de fallback: Es una opcion de contigencia por la cual se puede optar si la opcion primaria no esta disponible).
+
+Fairness metrics: disparate impact, false positive/negative across subgroups.
+
+Robustness indicators: número de adversarial triggers detectados.
+
+Distribution shift: KL divergence, Population Stability Index, centroid shifts 
+(Definicion de KL Divergence: Es una medida de cuanta diferencia hay entre dos distribuciones de probabilidad. Definicion
+de Population Stability Index: Es un indicador que mide la estabilidad de una
+variable o conjunto de datos entre dos periodos de tiempo o entre dos grupos de datos, en este contexto sirve para
+vigilar si los datos que entran a la IA se mantienen consistentes o si estan cambiando demasiado con respecto
+a lo esperado.
+Definicion de centroid shifts: Es una tecnica geometrica que mide cuanto se ha
+movido el "centro" de una nube de datos (centroide) en el espacio de caracteristicas,
+en este contexto, ayuda a identificar si el perfil general de los datos ha cambiado).
+
+Alerting & escalado: definir umbrales y playbooks para cada alerta; incluir escalado humano
+inmediato para señales criticas. (Definicion de playbook: Es un conjunto de instrucciones, procedimientos, y mejores practicas
+documentadas y predefinidas que sirven como guia para llevar a cabo tareas especificas, responder a eventos o ejecutar
+estrategias en diversos ámbitos, como la ciberseguridad, el marketing, la gestion empresarial y la participacion
+ciudadana).
+
+Logging seguro y privado: Logs suficientes para auditoria sin violar privacidad; separar logs
+rastreables de logs de contenido. (Definicion de log: Es un archivo o registro que contiene informacion
+secuencial y cronologica sobre los eventos y actividades de un sistema informatico, aplicacion o proceso. Estos registros incluyen detalles como la hora, el origen del eventos,
+mensajes de error, actividad del usuario, y cambios en la configuracion).
+
+Controles de seguridad (Threat Model & mitigaciones) 
+
+Amenazas principales: Data poisoning, model inversion, membership inference,
+prompt injection, supply chain compromise, insider malicioso, escalada por errores
+de automatizacion. (Definicion de data poisoning: Se produce cuando un atacante manipula los resultados
+de un modelo de IA o aprendizaje automatico modificando sus datos de entrenamiento. 
+Definicion de model inversion: Es un tipo de ataque que utiliza el resultado final de un
+modelo de IA para identificar el conjunto de datos original con el que se entreno el sistema. 
+Definicion de membership inference: Es un ataque que intentan predecir si un punto de datos en 
+particular forma parte de los datos de entrenamiento de un modelo objetivo.
+Definicion de insider malicioso: Es una persona con acceso legitimo a una organizacion, como un empleado o contratista,
+que utiliza intencionadamente ese acceso para causar daño, robar datos, o compromter
+la confidencialidad, integridad o disponibilidad de la informacion).
+
+Mitigaciones tecnicas:
+
+Data governance: Validacion en entrada, firma de datasets, test suites.
+
+Adversarial training & robustness: Generar ataques adversariales periodicos 
+y entrenar defensas
+
+Input sanitation & sandboxing: Preprocesamiento, length limits, filtration
+y capas de seguridad antes de pasar al modelo
+
+Output filters / safety layers: Modelos secundarios que actuaran como "Guardrails"
+(Filtro de salidas, classifier de deteccion de violaciones). Importante: Estos filtros deben
+de ser auditables y no convertirse en single points of failure.
+
+Model Watermarking & provenance: firmar pesos y artedactos para detectar exfiltracion 
+o uso no autorizado. (Definicion de Model Watermarking: Es una tecnica para incrusttar
+informacion identificable y rastreable en modelos de inteligencia artificial o en su contenido
+generado, para asi verificar la autenticidad, proteger la propiedad intelectual y detectar modificicaciones
+o el origen del contenido).
+
+Secret & key management: rotate kays, hardware security modules (HSMs).
+
+
+Auditoria, transparencia e involucramiento externo
+
+Auditorias independientes periodicas (tecnicas y eticas).
+
+Red-team publico + bug bounty para descubrir fallos y ataques creativos
+(definicion de Red-team publico: Es un grupo autorizado y organizado de personas
+para que simulen ser atacantes reales para asi emular capacidades de ataque o explotacion
+de un posible adversario contra una estrategia de seguridad. Definicion de bug-bounty:
+Es un programa mediante el cual una organizacion puede invitar a una comunidad de hackers
+eticos a buscar vulnerabilidades en sus sistemas, estrategias de seguridad, a cambio
+de recompensas financieras o reconomiento).
+
+Publicacion de model cards y datasets summaries (sin exponer datos sensibles).
+
+Panel ciudadano y comite etico con capacidad real de veto o recomendacion vinculante
+para decisiones criticas.
+
+Mecanismos de apelacion para las personas: Ruta clara para reportar daños y pedir correcion.
+
+Respuesta a incidentes y "kill swith"
+
+Playbook de incident respose:
+
+1.- Deteccion incial (monitor, reporte ciudadano).
+
+2.- Clasificicacion (nivel 1-4: Informativo → critico).
+
+3.- Contencion inmediata (canary rollback, degradacion controlada, desconexion parcial).
+
+4.- Investigacion forense (log review, dataset snapshots, model diffs).
+
+5.- Mitigacion & reparación (path, retrain, data quarantine).
+
+6.- Comunicacion publica (transparente, con timeline y remedios).
+
+7.- Revision post-mortem y mejoras.
+
+Kill swith seguro: mecanismo de descocenizion que requiere autorizacion de multiples partes,
+registro inmutable de su uso, y procedimientos para 
+restaurar el servicio de forma controlada.
+
+7.- Métricas y KPIs de seguridad y alineamiento (Definicion de KPIs: son indicadores
+clave de rendimiento, son medidas cruciales y cuantificlabes del progreso hacia
+un resultado deseado).
+
+Alignment Score Composite: Combinacion ponderada de: % outputs que violan hard contraints,
+score de toxicidadm tasa de fallback humano
+
+Fairness KPIs: disparate impact ratio < X, paridad de tasa de error 
+de subgrupos
+
+Robustness KPIs: Adversarial attack succes rate ≤ target.
+
+Privacy KPI: Epsilon de DP en entrenamientos sensibles (.
+
+Operantional KPIs: MTTR (mean time to recover), numero de rollbacks, % de despliegues
+con aprobacion de multiples partes.
+
+
+Pruebas concretas, red team y casos de uso de prueba:
+
+Casos de abuse: coercion, manipulacion de opinion publica, servicios de emergencia
+bloqueados, discriminacion en acceso a recursos.
+
+Pruebas de red-team: prompt injection, data-poison scenarios, supply chain 
+compromise simulado, attacks que buscan escalar privilegios.
+
+Test UX/interpretabilidad: mostrar explicaciones a usuarios no técnicos 
+y medir su compresion y confianza.
+
+Simulacros de incident response: tabletop exercises con comite etico, tecnicos y 
+comunicación.
+
+
+Gobernanza organizacional (roles, responsabilidades)
+
+AI Ethics Boards (externo/parcialmente indepediente):
+revision de especificaciones, HRIA, vetos.
+
+Model Governance Comitte (interno): aprueba despliegues, cambios de especificaciónm
+y pruebas de riesgo.
+
+Security Team / Blue team: operativa diaria de seguridad y despliegues. (Definicion de
+security team/blue team: Es un equipo de seguridad defensiva cuya funcion es proteger los
+sistemas, redes y datos de algo contra amenazas y ataques).
+
+Red-team (externo o tercerizado): pruebas adversariales periodicas.
+
+Compliance & Legal: garantiza cumplimiento regulatorio por juridisccion.
+
+Customer/Citizen Ombudsperson: receptor de quejas y coordinador de apelaciones. (Definicion
+de ombudsperson: Es el organo encargado de recibir e investigar las quejas de particulares contra
+deficiente actuacion, negligencia o abusos de autoridades).
+
+Como aclaración: No existe una garantia de "cero riesgo", todas las medidas que mencione anteriormente
+reducen y gestionan riesgos, pero no los eliminan. Este sistema no es inmune a dictaduras, pero si reduce
+muchisimo el riesgo de una dictadura y corrupcion estructural, y eso es lo importante, minimizar riesgos,
+solo la practica puede decir si algo es inmune o no.
