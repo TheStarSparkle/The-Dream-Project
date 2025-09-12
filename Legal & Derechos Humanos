@@ -1,0 +1,135 @@
+Resumen Ejecutivo:
+
+El diseño e implementacion de The Dream Project deben de enclarse desde el
+inicio en un marco juridico y de derechos humanos robustos: proteger
+derechos fundamentales (privacidad, no discriminacion, debido proceso,
+libertad de asociacion y expresión), garantizar transparencia y rendicion de
+cuentas, establecer vias de reparacion y realizar debida diligencia humana
+y tecnica antes del despliegue. Las obligaciones varian por jurisdicción, pero 
+existen normas internacionales y regionales (GDPR, UN Guiding Principles,
+EU AI Act, UNESCO, OECD) que ofrencen estandares practicos a seguir.
+
+
+Principios legales y de derechos humanos aplicables:
+
+Proteccion de datos y privacidad: procesamientos automarizados de gran escala
+y decisiones basadas en IA que afecten derechos indiviaduales activan
+obligaciones de evualuacion de impacto y limites regliados (Por ejemplo. Art, 36 GDPR
+-DPIA).
+
+Prohibicion/limitación de decisiones totalmente automatizadas: las personas
+tienen derecho a no estar sujetas a decisiones basadas unicamente en procesos
+automatizados que produzan efectos legales o similares sin supervision
+humana significativa (Art. 22 GDPR). Esto obliga definir claramente el rol
+humano en decisiones sensibles.
+
+Normativa sectorial y de IA: La UE ya tiene un marco especifico sobre IA (AI Act) que 
+clasifica sistemas por riesgos y obliga requisitos reforzados para sistemas
+de alto riesgo (evaluaciones, conformidad, registro, transparencia).
+
+Debida diligencia en derechos humanos: empresas y autoridades deben de identificar, prevenir
+y remediar impactos a derechos humanos (UN Guiding Principles).
+Paia IA esto implica HRIA/Human Rights Due Diligence continua.
+
+Etica y estandares internacionales: Recomendaciones como la UNESCO
+y los principios de la OCDE establecen obligaciones de transparencia,
+euidad y participacion publica que complementan el marco legal.
+
+Obligaciones concretas que debe contemplar este proyecto:
+
+Evaluaciones previas obligatorias
+
+HRIA (Human Rights Impact Assesment) y DPIA (Data Protection Impact
+Assesment) antes del despliegue de cualquier modulo que procese datos personales
+a escala o tome decisiones relevantes. La DPIA es obligatoria cuando el procesamiento 
+implica un "alto riesgo" (Por ejemplo: Perfilado, monitorización masiva).
+
+Garantizar intervencion humana significativa
+
+Cualquier decision que produzca efectos juridicos o similares requerira revision humana
+documentada: definicion de "quien" (roles), "como" (procedimiento), 
+y "cuando" (umbrales). Esto evita contravenir normas como el Art. 22 GDPR.
+
+Transparencia y documentacion tecnica:
+
+Publicar model cards, data heets, logs de versiones y registros de entrenamiento,
+metodologia de evaluacion de sesgos y un registro (audit trail) de decisiones
+automatizadas que pueda verificarse por auditores autorizados.
+
+No-discriminación y equidad:
+Definir metricas de equidad, test antes y despues del despliegue, y procesos
+de remediacion si se detecta impacto diferencial sobre grupos protegidos.
+
+Remedios y recursos efectivos
+
+Establecer canales accesibles para que personas afectadas apelen decisiones,
+soliciten revision y obtengan reparacion (human review, correcion de datos, compensacion
+cuando proceda).
+
+Contratacion y cadena de suministro responsable
+
+Clausulas contractuales vinculantes con proveedores (incluyendo terceros de
+modelos/LLMs, datasets y hardware) que exijan compliance con HRIA/DPIA, transparencia 
+y derecho a auditar; alinearlo con directivas emergente (Por ejemplo, CSDDD 
+en la UE para grandes empresas).
+
+Proteccion de datos transfronterizo:
+Cuando se transfieran datos entre jurisdicciones, usar mecanismos legales
+reconocidods (SCCs, decisiones de adecuacion o salvaguardas equivalentes)
+y documentar esas transferencias.
+
+Procurement responsable y adquisiciones públicas:
+Si el Estado es actor o cliente, integrar clausulas de derechos humanos y
+auditoria en los contratos de adquisicion (procurement), y requerir que 
+los sistemas cumplan la due diligence humana y tecnica recomendada por
+organismos internacionales.
+
+Mecanismos operativos: 
+
+Politica corporativa de derechos humanos: compromiso publico
+que incluya alcance, responsabilidades, procesos de due diligence y 
+canal de remedios.
+
+HRIA + DPIA integradas: procesos paralelos y coordinados: HRIA cubre impactos
+en derehos (libertad, igualdad, empleo, salud), DPIA cubre riesgos para datos personales
+y privacidad. Ambas deben revisarse ante cambios en el sistema.
+
+Registro publico de sistema de IA: inventario publico con finalidad
+clasificacion de riesgo, metricas de perfomance y enlaces a los informes
+de impacto (requisito parecido al esperado por la IA Act).
+
+Comite de supervision independiente (oversight board): panel tecnico/etico 
+con representacion ciudadana y de expertos para supervisar despliegues. revisar
+incidentes y recomendar mitigaciones.
+
+Mecanismo de apelacion operativo: Interfaz accesible para revisar desiciones (timelines,
+SLAs), con posibilidad de escalar a tribunal humano o autoridad reguladora.
+
+Plan de respuesta a incidentes y notificacion de daños:
+Playbooks para fugas de datos, sesgos detectados, manipulaciones o uso indebido, con obligaciones
+de notificaion a afectados y autoridades segun ley.
+
+Auditorias externas periodicas: auditoria tecnica (seguridad, robustez, fairness)
+y auditoria HR (impacto), con publicacion de resumes publicos y
+un canal para findings y correciones.
+
+Riesgos Legales Principales y mitigacion practica:
+
+Riesgo: Decisiones que vulneren derechos (rechazo automatico de prestaciones,
+censura). Mitigacion: intervencion humana, pruebas de equidad, limites
+legales.
+
+Riesgo: Infraccion de privacidad por monitorizacion masiva. Mitigacion del riesgo: DPIA,
+minimizacion, differencial privacy, retencion limitada, encriptacion.
+
+Riesgo: Responsabilidad por proveedores (supply chain). 
+Mitigacion del riesgo: Clausulas contractuales, due diligence y obligacion
+de remediacion.
+
+Riesgo: Sanciones regulatorias bajo AI Act/GDPR
+
+Mitigacion del riesgo: Clasificacion de riesgo de sistemas, conformidad previa
+registros de compliance.
+
+Como aclaración: Aunque hay mitigaciones de riesgos, no existe el "riesgo cero", asi
+que es bueno tener planes de contigencia en caso de que algo salga mal.
