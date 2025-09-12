@@ -1,0 +1,266 @@
+Resumen Ejecutivo
+
+La federacion de estados es el diseño que permite que cada estado (o
+jurisdiccion) opere su propio dominio—con su propia infraestructura,
+datos de sensado y nodos de IA, y, a la vez, coopere con otros estados
+para compartir unicamente lo necesario (resultados agregados, mensajes
+de coordinacion, votaciones inter-estatales, etc). La federacion busca
+equilibrar soberania de datos y resilencia distribuida, minizando el 
+riesgo de un fallo o ataque unico que comprometa todo el sistema.
+
+Estos seran los principios guias: Soberania, minima exposicion de datos,
+interoperabilidad verificable, robustez frente a fallos
+parciales y gobernanza clara para actualizaciones y resolución
+de conflictos.
+
+
+Arquitectura
+
+Unidad federada = "Estado": cada esestado ejecuta su propio
+domain-chain (ledger + servicios), nodos de IA locales y un federation
+gateway que gestiona intercambio con otros estados. (Definicion de
+de ledger: Es un registro sistematico de transacciones financieras 
+que puede ser fisico o digital, normalmente es utilizado en contabilidad
+tradicional, como por ejemplo en tecnologia blockchain).
+
+Composicion tecnica por estado
+
+Ledger permissioned local (validadores locales: gobierno 
+regional, universidad, ONG).
+
+Servicios de IA que consumen datos locales (ingestión, modelos,
+decision asistida).
+
+Gateway IBC/bridge + relayers que comunican eventos y
+mensajes autorizados a la red federada.
+
+Control de acceso y auditoria local (SBOM, model cards, logs
+firmados).
+
+Capa de interoperabilidad: canales punto-a-punto o canales
+interchain (Por ejemplo. IBC-style) para mensajes autenticados
+y auditables entre estados; cuando se necesita privacidad
+absoluta, se usaran canales federados privados. (Por ejemplo
+Hyperledger Fabric channels).
+
+
+Patrones de sincronizacion y consistencia (Que se sincronizara
+y como)
+
+No todo se sincronizara igual: Se separaran datos por clasificacion y
+se aplicaran patrones distintos.
+
+Eventos y mensajes transaccionales (alta integridad)
+
+Ej: Resultados de votacion ideologica agregada, cambios de
+gobernanza, cerficados de revocación.
+
+Requisito: integridada fuerte y auditibilidad
+
+Patron: publicar commits o merkle-hashes en el ledger local y
+replicar mensajes verificables a otros estados via protocolo de
+mensajería con pruebas (merkle proof / light-client proofs).
+Se usaran IBC-like relayers que transportan mensajes con pruebas
+de autenticidad.
+
+Datos agregados/ estadisticas (eventual correctness, privacidad)
+
+Ejemplo: metricas de salud publica agregadas, indices ambientales.
+Requisito: preservar privacidad; tolerar latencia corta.
+
+Patrón: intercambio de estadisticas agregadas con differencial
+privacy y firmado, o federated learning / secure aggregation
+para modelos globales. Evitar transferir datos individuales
+crudos (soberania + GDPR).
+
+Datos operativos no criticos (alta disponibilidad, baja coordinación)
+
+Ejemplo: catalogos de servicios, plantillas de ideologias, logs de
+auditoria no sensibles.
+
+Patrón: replicacion eventual usando CRDTs o mecanismos de sincronización
+eventual que resuelven conflictos automaticamente (apropiado cuando
+no se requiere transaccionalidad estricta). CRDTs son utiles
+para datos colaborativos y de configuracion distribuida.
+
+Operaciones transaccionales multijurisdiccionales (fuerte
+atomicidad requerida)
+
+Ejemplo: transferencias financieras intergubernamentales, decisiones
+legales que requieren consenso.
+
+Patrón: Evitar protocolos centralizados tipo 2PC en despliegues
+a gran escala (2PC crea un punto de bloqueo y coordinación complejo).
+En su lugar, se diseñaran flujos de negocio compesatorios,
+conciliacion off-chain y protocolos con confirmación explicita
+por quórom entre las partes.
+
+Protocolo para interoperabilidad
+
+MVP: cada estado ejecuta un ledger permissioned con finality
+rapida (Por ejemplo: Tendermint / Cosmos SDK o Hyperledger
+Fabric si se necesita privacidad por canal). La interoperabilidad se
+implementa mediante relayers y un protocolo de mensajes verificados
+(estilo IBC) entre las cadenas/ledgeres. IBC proporciona mensajeria
+ordenada, autenticada, y con verificacion ligera (light-client), entre
+cadenas heterogeneas.
+
+Por que IBC-like (ventajas):
+
+Permite interoperabilidad entre distintas consesos si soportan
+finality verificable.
+
+Transmision de mensajes con pruebas de inclusio (merkle proofs)
+que otros estados verifican localmente antes de aceptar la acción.
+
+Trade-off: requiere mantener relayers y light-clientes;  aumenta
+complejidad operativa comparado con una única base de datos 
+federada.
+
+Alternativa con mayor privacidad:
+Hyperledger Fabric con canales por par de estados o grupos (cada channel
+mantiene ledger privado), y mecanismos de gateway para publicar solo
+los hashes o resumenes publicos. Esta alternativa es mas apropiada
+cuando la privacidad entre estados es prioritaria.
+
+Flujo lógico de sincronizacion (Ejemplo: publicar resultado agregado)
+
+Estado A calcula resultado agregado local (Por ejemplo: Conteo 
+ideologico local).
+
+Estado A crea un commit object (merkle root, metadata, signature(
+y lo publica en su ledger local.
+
+Relayer lee el bloque y transmite un mensaje (incluyendo
+merkle proof) al gateway del Estado B.
+
+Estado B verifica la prueba (light-client verification) y, 
+si valida, guarda el evento en su propia cola de eventos auditables
+
+Si el evento requiere accion (Por ejemplo: actualizacion de un indicador
+comun), Estado B aplica la accion localmente siguiendo reglas
+de negocio federadas (Ej. Aplicar cambio solo si X% de estados
+validan o si quorum multisig lo aprueba).
+
+Mecanismos de concialición y resolucion de conflictos
+
+Quorumy thresholds: Definir para cada tipo de mensaje si
+requiere confirmacion simple, quórom cualificado o desencriptado
+por trustees. Ej: para cambios de gobernanza federada, requerir
+2/3 estados validadores.
+
+Snapshots y reconciliación: Estados deben publicar snapshots
+firmados periodicamente. En caso de divergencia (conflicto de datos, en
+otras palabras), se procede a reconciliacion basada en snapshots y
+logs firmados; si persiste la disputa, se activara un panel de 
+arbitraje federado.
+
+Backstop human-in-the-loop: para divergencias no automatizables,
+comite de resolucion con poderes temporales de bloqueo/reversión
+(kill-switch federado).
+
+Seguridad, privacidad y soberania de datos
+
+Soberania: por defecto, no transferir datos personales
+crudos entre estados. Compartir solo los estrictamente necesario
+(hashes, agregados, pruebas). Mapear requisitos legales por
+jurisdiccion (GDPR y guias EDPB) antes de cualquier transferencia.
+
+Privacidad tecnica: Usar DP para estadisticas, secure aggregation
+para federated learning y tecnicas de MPC/threshold crypto para
+operaciones que requieren secreto compartido.
+
+Intefridad: todos los mensajes entre estados deben tener pruebas
+criptograficas (signatures, merkle proofs) y ser verificables por
+light-client.
+
+Supply-chain: cada gateway y relayer forma parte del perimetro
+de riesgo. Firmar artefactos, publicar SBOM y aplicar controles
+CI/CD a estos componentes.
+
+Gobernanza de la federacion (quién decide, y cómo)
+
+Constitucion federada:  definir estatutos que incluyan: criterios
+de adhesion de estados, composicion y seleccion de validadores,
+quorom s para tipos de decisiones (operativas, de seguridad, de
+upgrades).
+
+Trust anchors: Conjunto inicial de entidades (Por ejemplo: 7–11) que
+actuan como validadores fundacionales; reglas explicitas para incorporacion/expulsion.
+
+Politica de upgardes: actualizaciones federadas requieren propuesta
+→ periodo de observacion pública → prueba canary en subconjunto
+de estados → despliegue completo con rollback automatico en X 
+tiempo si fallan tests,
+
+Mecanismo de apelacion: panel independiente que gestionara disputas
+de interoperabilidad o abuso del kill-switch.
+
+Transparencia: publicar changelogs, auditorias y registros de uso
+del kill-switch.
+
+
+Disponibilidad, desempeño y parametros operativos (sugerencias
+practicas)
+
+Objetviso operativos (ejemplos):
+Sincronizacion/latencia entre estados (mensaje critico): objetivo
+< 30 s (MVP) — ajustable con arquitectura de relayers.
+
+Consenso local: finality en segundos (depende del protocolo seleccionado).
+
+Sync lag medible: mantener < 2 bloques de diferencia para light
+clientes.
+
+Snapshots & retention:
+
+Snapshots firmados cada N horas (Por ejemplo: 1-2 horas) y 
+retencion dde logs firmados por 10 años para auditoria.
+
+Escalado: particionar tipos de mensajes (control-plane vs
+data-plane) y priorizar control-plane (gobernanza, votes) sobre
+data-plane (estadisticas no-urgentes).
+
+
+Fallos y modos de degradacion (Que ocurre si algo falla)
+
+Relayer offline: mensajes se ponen en cola y se retransmiten;
+no produce inconsistencia si los mensajes incluyen pruebas de orden.
+
+Calidator comprometido: Activar rotacion de validator + revocacion
+en registro federado. Reconciliacion con snapshots para
+detectar manipulación.
+
+Divergencias de estados: bloqueo temporal de acciones federadas
+relacionadas y activación del panel de resolucion; continuar
+operaciones locales no afectadas.
+
+Ataque masivo / denegacion: degradar modo a "operacion local"
+(cada estado continua gobernando localmente) hasta una restauracion
+de conectividad segura.
+
+Auditoria, monitoreo y KPIs (en otras palabras: que medir)
+
+Sync lag (s): tiempo medio desde publicacion local hasta
+verificacion por N estados.
+
+Throughput de mensajes federados (msg/s)
+
+% mensajes con pruebas validas (objetivo 100%).
+
+MTTD / MTTR para relayers gateways.
+
+# discrepancias detectadas por reconciliacion por preiodo.
+
+% de snapshots verificados por terceros.
+
+Limitaciones y transparencia sobre riesgos residuales:
+
+La federacion reduce riesgo de fallo por un unico punto, pero aumenta la
+complejidad operacional (relayers, light clients, gobernanza federada)
+
+Trnasferir datos entre jurisdicciones implica desafios
+legales continuos: hay que mapear requisitos por pais.
+
+Patrones transaccionales fuertemente ACID across jurisdictions
+son costosos y fragiles.
