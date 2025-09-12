@@ -1,0 +1,120 @@
+Resumen Ejecutivo:
+El objetivo de este documento es diseñar un sistema de voto que permita 
+elecciones por ideologias (no por personas. Ya que si votamos por ideologias 
+minimizamos muchisimo el riesgo de raiz cosas como el culto a la personalidad, manipulacion psicologica, dictaduras, 
+politicos corruptos, etc. Y fomentamos el pensamiento critico de la población. No existe garantia 
+de riesgo cero, pero se reduce de raiz muchisimo el riesgo. Solo la practica puede 
+decir si algo es inmune o no) con estas propiedades que quiero que tenga:
+
+1.- Integridad (Que los votos emitidos se cuentan como se emitieron).
+
+2.- Privacidad (Que no se pueda vincular el voto a la persona).
+
+3.- E2E-Verificabilidad (Que cada votante pueda comprbar que su voto 
+fue registrado y contado).
+
+4.- Resistencia a fraudes de regristro y a Sybil (Un solo voto por persona elegible. 
+Definicion de Sybil en ciberseguridad: Sybil es un tipo de ciberataque donde el atacante hace multiples identidades
+digitales para obtener control sobre una red).
+
+5.- Mitigacion de coerción (dificultar lo mas posible que un tercero 
+obligue o compre votos)
+
+6.- Auditabilidad pública y capacidad de auditoria independiente.
+
+Decisiones Arquitectonicas que tomare:
+
+Para la Identidad: Usare DID (Identificadores descentralizados. Definicion de identificadores descentralizados: Son identificadores unicos y globales que permiten a la gente controlar su identidad digital sin depender de una autoridad centralizada. 
+Estos identidicadores estan vinculados a un documento DID y una clave 
+criptografica, se almacenan en una blockchain, y sirven para 
+verificar de forma segura la autenticidad de una persona, 
+organizacion o dispositivo en el entorno de la web descentralizada 
+y la identidad autosoberana) y CV (Credenciales Verificables. 
+Definicion de credenciales verificables: Son representaciones 
+digitales de identidad que cumplen con estandares abiertos del  W3C, cuya autenticidad puede ser confirmada criptograficamente en tiempo real) 
+para emitir credenciales de elegibilidad por parte de autoridades confiables (Por ejemplo: Comisiones Electorales). Esto permite que el votante presente una credencial verificable sin necesidad de exponer su dato fuente cada vez.
+
+Para el registro y la auditoria publica: Usaria un Bulletin Board inmutable (Blockchain o ledger autorizado) (Definicion de Bulletin Board Inmutable: Es un sistema de comunicacion o superficie donde los mensajes, datos
+o avisos se publican de forma que una vez se añaden, no se pueden modificar ni eliminar, manteniendo asi un registro permanente e inalterable del contenido. El termino combina la idea de un tablon de anuncios, que se utiliza para compartir
+informacion publica pública, con la propiedad de inmutabilidad, que garantiza que la informacion es permanente y no se puede cambiar. Definicion de ledger autorizado: Es un tipo de registro distribuido (DLT), o libro mayor en el que solo los participantes previamente autorizados tienen permitido escribir, leer y 
+validar las transacciones. A diferencia de ledgers publicos y sin permiso, donde cualquier persona puede participar, un ledger autorizado impone controles de acceso para regular la participacion, ofreciendo mayor seguridad y privacidada al restringir quien puede operar en la red. 
+Definicion de blockchain: Blockchain es un registro digital distribuido, compartido e inmutable de transacciones que se agrupan en bloques enlazados secuencialmente) donde se publiquen los dobjetos criptografivos (boleta cifrada, pruebas ZK, logs de auditoria),
+separando datos publicos (pruebas, hashes) de datos privados (votos cifrados).
+
+Para la privacidad y el conteo: Utilizare esquemas de cifrado homomórfico + umbral de decrytion (trustees con llaves compartidas) o un mix-net con pruebas de correcto remezclado; ambos enfoques permiten conteos comprobables sin exponer votos individuales (Definicion de cifrado homomórfico: El cifrado homomorfico consiste en convertir datos en texto cifrado que puede analizarse y procesarse como si estuviera en su forma original. 
+El cifrado homomorfico permite realizar operaciones matemáticas complejas con datos cifrados sin comprometer el cifrado. 
+Definicion de umbral de decryption: Es un nivel especifico de colaboracion entre multiples partes para poder descrifrar un mensaje o informacion cifrada, esto se utiliza para mejorar la privacidad, ya que, de forma indiviaudl, los participantes no pueden descrifar la informacion, protegiendo de una posible coaccion o filtracion de datos.
+Definicion de mixnet o red mixta: Es una infraestructura de red informatica diseñada especificamente para la privacidad y el anonimato que enmascara los metadatos de la comunicación al mezclar
+y cifrar en capas los mensajes para ocultar su origen y destino). Para dar ejemplos practicos: Pailler/homomorphic + threshold decripto, o mixnets con pruebas de remezclado.
+
+E2E verificabilidad: Adoptare un diseño de tipo Helios (o al menos sus ideas fundamentales), 
+donde cada votante obtendra una prueba verificable de que su boleta fue incluida; 
+extender con pruebas de ZK cuando sea necesario. 
+Helios demuestra principios de E2E, pero tiene limitaciones en la practica que deben de abordarse.
+
+Para la mitigacion de coercion: Utilizaria mecanismos de revote y 
+diseño sin recibo verificable por terceros, ademas de analisis organizacional 
+y politicas sociales/legales para prevenir compra/coercion de votos.
+
+
+
+
+El Flujo De Usuario (paso a paso)
+
+1.- Regristro / Inscripción 
+ Primero el cuidadano solicitaria verifiable credential de elegibilidad a una autoridad emisora (offline o con KYC ligero). 
+La autoridad emite una VC ligada al DID del interesado. (DID + VC = control del usuario sobre su credencial)
+
+2.- Autenticacion para votar 
+
+Votante se autentica en la web mediante su DID 
+y presenta una proof sin transmitir informacion sensible.
+
+3.- Generacion de la boleta
+
+El sistema generaria la boleta en el cliente (preferiblemente por privacidad). 
+El votante elige ideologias/fusion de lo mejor de cada ideologia 
+y el cliente cifra la seleccion (cifrado homomorfico o prepararacion de mensaje para mix-net).
+
+4.- La publicacion y el recibo
+
+Se publica en el bulletin board: (A) ciphertext de la boleta, (B) 
+hash/commitment, (C) prueba ZK de validez del formato de boleta 
+(por ejemplo: "Elige ≤1 opcion por categoria"). 
+El votatnte recibe un tracking token que le permite verificar inclusion del hash en el ledger.
+
+5.- Verificacion por el votante
+
+El votante usa su token para comprobar que su hash aparece en el ledger 
+y que la prueba asociada es válida (E2E).
+
+6.- El Conteo
+Si se usa homomorphic tally: Los ciphertext se agregan criptográficamente y 
+un thereshold de trustees realiza la desencriptacion colectiva y publica el resultado + pruebas de ccorecto desencriptado.
+
+En el caso de que se use mix-net: Nodes de mezcla mezclan y 
+prueban remezclando correcto;  luego se publican los plaintext anonimizados para el conteo.
+
+La auditoria publica
+Todos los pasos (pruebas ZK, firmas, chaintime), se mantienen en 
+el bulletin board para auditorias independientes y verificaciones por observadores.
+
+
+Mitigaciones Practicas (Riesgos conocidos, en otras palabras)
+
+Tratar de evitar confiar solo en apps moviles: El mobile voting ha 
+mostrado vulnerabilidades importantes en produccion (Caso Voatz).
+Requiere auditorias abiertas y codigo verificable.
+
+Anti-Sybil: Emision de VC por autoridad + limites de emision en 
+el ledger; empezar pruebas de elegibilidad off-chain 
+y verifficacion ZK on-chain.
+
+Coercion Resistance: Ofrecer ventanas de revote y siseño sin recibos comprobables a terceros; politicas legales y campañas educativas.
+
+Auditoria y transparencia técnica: Publicar model cards, codigo del 
+cliente, smart contracts y pruebas; fomentar red-teaming publico y bug bounties.  
+
+Pruebas: Simulaciones digitales donde se ponga en escenarios extremos a este sistema, 
+hasta que el sistema falle, despues ver que salio mal, y arreglarlo 
+o al menos hacer un plan de contigencia.
