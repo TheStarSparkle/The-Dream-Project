@@ -1,0 +1,255 @@
+Resumen Ejecutivo
+El objetivo de esta seccion es explicar las plantillas, procesos
+controles, metricas que tendran los modulos de explicacion de ideologias.
+Esta pensado para hacer que cualquier adulto pueda entender de manera facil y
+rapida las ideologias, pero tendra la opcion de profundizar, 
+si la persona quiere mas detalles.
+
+Modulo De Explicacion De Ideologias — Diseño, generacion, validacion
+y traduccion
+
+Objetivo del modulo: Cada modulo debe de permitir a una persona
+adulta comprender en 30-60 segundos la idea central (version "rapida")
+
+Obtener una explicación ampliada con ventajas, desventajas y
+efecos practicos.
+
+Ver implicaciones de politicas concretas (si se implementaran).
+
+Comparar facilmente con otras ideologias, 
+y con fusiones de ideologias propuestas.
+
+Acceder a fuentes verificables y a una FAQ para 
+dudas comunes.
+
+Consumir la informacion en multiples idiomas y 
+formatos accesibles.
+
+Estructura del modulo (plantilla):
+Cada modulo debe contener estas secciones, en este orden:
+1.-Titulo estandar (nombre de la ideologia).
+
+2.-Resumen ultracorto (30-50 palabras)
+
+3.-Resumen corto (120—200 palabras)— explicacion clara y
+concisa.
+
+4.-Pros (bullet list, 3—6 items)— posibles efectos adversos. (Definicion
+de bullet list: Es un formato que usa simbolos graficos para introducir y
+separar elementos de una lista).
+
+6.-Politicas tipicas asociadas (5—8 politicas concretas y
+como afectarian).
+
+7.-Impacto en derechos humanos/equidad (evaluacion breve).
+
+8.-Compatibilidades y fusiones de ideologias posibles (que 
+ideologias se pueden fusionar y por qué).
+
+9.-FAQ (5 preguntas frecuentes con respuestas cortas).
+
+10.-Indicadores y métricas que se usarian para evaluar exito
+(ej.: desempleo, GINI, satisfaccion).
+
+11.-Nivel de lectura / accesibilidad (p. ej. Flesch—Kincaid o
+descriptor "Basico/ Intermedio / Avanzado").
+
+12.- Fuentes verificables (listado con enlaces / referencias
+para cada afirmacion clave).
+
+13.- Version y metadatos (autor/es; fehca; revision; tags;
+changelog).
+
+Incluiria ademas:
+
+Resumen grafico (1 infografia/diagrama de 3 cajas:
+principios → politicas → efectos)
+
+Audio breve (lectura del resumen ultracorto).
+
+Boton "Profundizar" que abre la seccion ampliada.
+
+
+Pipeline De Generacion (como se generan los modulos) (Definicion de pipeline:
+Es un sistema de varias etapas que representa un flujo de datos, con el objetivo
+de lograr un resultado deseado).
+
+A. Fuentes y curaduria de contenido
+
+Corpus base: compilar fuentes academicas (papers, libros),
+articulos de referencia, manifiestos historicos, analisis 
+comparativos y fichas de organismos (OCDE, ONU, Think Tanks
+reconocidos).
+
+Prioridad: fuentes primarias y revisadas por pares > think
+tanks reconocidos > prensa.
+
+Metadatos: cada afirmacion debe tener referencia con metadato
+de confianza (autor, fecha, tipo de fuente).
+
+Produccion de texto (flujo)
+
+Plantilla de autor humano: redactores especializados crean 
+una primera version siguiendo la plantilla (se exige citacion
+inline).
+
+IA asistida: IA genera borradores a partir del corpues; las
+salidas deben marcarse como "IA-asisted" y llevar las fuentes
+exactas.
+
+Edicion humana: editor/a de contenido revisa por claridad,
+neutralidad, y verificabilidad; añade referencias.
+Control de sesgo: aplicar checklist sesgos (se presenta 
+balance de ventajas y desventajas? omiten evidencias
+contrarias?).
+
+Produccion multimedia: Diseñadores crean infografias
+y archivo de audio sintetizado o grabado.
+
+C. Guardrails tecnicos
+
+Limita a la IA a resumir y parafrasear fuentes citadas;
+prohibe inventar hechos.
+
+Usa prompts estructurados que exijan incluir referencias y
+un bloque "incertidumbres / controversias".
+
+Registra el chain of evidence (que fuentes alimentaron la
+generacion).
+
+Ejecuta una run de verificacion automatica: fact-checker + 
+detector de hallucinaciones + verificacion de citas 
+(comprobar que cita existe).
+
+Pipeline de validacion (como se validan y aprueban)
+
+A. Validacion tecnica / factual
+
+Fast-checl automatico: comparar afirmaciones cuantitativas
+contra datasets oficiales (Por ejemplo: PIB, GINI). Señalar
+discrepancias.
+
+Verificacion manual: equipo de fact-checkers revisa las
+afirmaciones clave (al menos 3 por seccion).
+
+Lista roja: rechazar contenidos que hagan afirmaciones no
+verificables o injuriosas.
+
+B. Validacion de neutralidad y equidad 
+
+Panel de revision multidisciplinario: incluye politólogos
+historiadores, economistas y representantes civiles (publico,
+minorías).
+
+Checklist de neutralidad: lenguaje no persuasivo; evita imperativos;
+presenta evidencias contrarias.
+
+Impacto en derechos humanos: mini-HRIA que identifique riesgo
+de discriminación.
+
+C. Validacion UX /compresibilidad
+
+1.- Pruebas de lectura: medir comprensión en una muestra representativa 
+(n=100) con preguntas de comprensión.
+
+2.- Medir tiempo a compresion: objetivo ≤ 60 segundos 
+para el resumen ultracorto.
+
+3.- A/B tests: dos versiones de resumen para ver cual tiene mejor
+compresion y menor confusion.
+
+D. Aprobacion final
+
+Documento pasa a edición final y a la columna de control
+(registro en el changelog) si cumple: verificacion factual,
+panel de neutralidad, pruebas de lectura ≥ umbral, y HRIA
+aceptable.
+
+
+Pipeline de traduccion y localización
+
+Objetivo: traducciones no literales — localizacion cultural
+y legal
+
+A. Estrategia general
+
+MT + Post-edit humano: usar traduccion automatica de ultima
+generación (NMT) para velocidad, luego post-edicion humana
+profesional.
+
+Black-translation spot-checks: seleccionar aleatoriamente
+X% de modulos traducidos y hacer back-translation para
+detectar perdidas de significado.
+
+Localización cultural: Ajustar ejemplos, referencias histo
+ricas y politicas segun la jurisdiccion (evitar ejemplos que
+no apliquen).
+
+Revision legal local: si el contenido menciona requisitos 
+legales o politica publica, que lo revise un experto local.
+
+B. Flujo concreto
+
+Exportar texto fuente con metadatos y claves terminologicas.
+
+Ejecutar NMT (sistema controlado: registrar modelo y version).
+
+Post-edicion humana por traductores con instrucciones (mantener
+tono neutral, revisar terminos tecnicos).
+
+QA de traduccion: glosario, control de consistencia, validacion de
+cifras y nombres propios.
+
+Publiicacion y marcado de version traducida.
+
+Accesibildiad y formato
+
+Generar audio en idioma local, subtitulos y transcripciones.
+
+Crear versiones en lenguaje fácil (plain language) para baja
+alfabetizacion.
+
+
+Gobernanza editorial y control de versiones
+
+Editoria board: establece criterios, valida paneles, y resuelve
+disputas.
+
+Changelog publico; todas las versiones con fecha, autor, reviewers y
+razones del cambio.
+
+Mecanismo de apelacion: ciudadanos pueden pedir correción
+(ticket publico con plazo de respuesta).
+
+Licencia: contenido con licencia abierta (Por ejemplo. CC BY)
+para transparencia y auditabilidad.
+
+Metricas y KPIs (como medir calidad)
+
+Compresion media: % de usuarios que responden correctamente 3
+preguntas clave (objetivo ≥ 80%).
+
+Tiempo de medio lectura del resumen corto (objetivo ≤ 120s).
+
+Tasa de discrepancias fatuales detectadas por fact-checkers
+(objetivo ≤ 1% por modulo).
+
+Tasa de post-edicion necesaria (MT output → final human edits %)
+
+Indice de confianza ciudadana (encuestas post-uso).
+
+Tasa de apelaciones y tiempos de resolución (objetivo: < 14 dias por
+apelación).
+
+Controles eticos y de seguridad (que evitar y como)
+
+No usar modulos para persuacion dirigida: Se retringaran usos que
+favorezcan campañas politicas con micro-targeting.
+
+No personalizar mensajes de forma que manipule (Por ejemplo: "si votas esto,
+te ganarás X") — solo informacion.
+
+Proteccion de datos: no recopilar ni almacenar preferencias politicas
+personales sin consentimiento explicito y policias de minimizacion.
+
+Auditoria de cambios: todo cambio en módulos quedara registrado.
