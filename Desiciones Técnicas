@@ -1,0 +1,59 @@
+Resumen Ejecutivo
+En esta seccion tomare las decisiones tecnicas (por ejemplo:
+decidir una tecnica por defecto para el MVP, indicar que fa
+milia de ZK-proof usare (Groth16/PLONK/Halo2), librerias/implementaciones) para este
+proyecto. Mostrare el impacto del trusted setup y herramientas 
+(circom/snakjs, arkworks, bellman, etc.).
+
+A. Voto Stack — MVP
+
+Ledger: permissioned basado en Tendermint/Cosmos SDK o Hyperledger Fabric (menor riesgo
+51% y control de validadores: gobierno, universidades, ONGs).
+
+Identidad: W3C DID + W3C Verifiable Credentials. Metodo inicial: did:web (facil de auditar
+y simple para una version piloto).
+
+Conteo: Paillier Homomorfico con threshold 3-de-5 trustees
+(5 trustees independientes; threshold 3 para desencriptar).
+
+E2E verificabilidad: Diseño Helios-style + pruebas ZK para la validacion
+de formato (usar PLONK/zk-tooling).
+
+Anti-coercion: ventana de revoto (permite revocar recibos) +
+eliminación de recibos demostrables.
+
+Revocation: revocation registry on-chain con timestamps y 
+CRL hashed en ledger.
+
+B. LLaves y custodia
+
+Custodia de claves de trustees en HSM + opcional MPC (para 
+mayor seguridad). Rotacion periodica cada 12 meses o tras incidente.
+Log de rotaciones en ledger,
+
+C. Privacidad en analisis/modelos
+
+Para entrenamientos sensibles, usaria DP-SGD con 
+objetivo de ε entre 0.1–2 segun sensibilidad (apunta a ε ≤ 1 para datos 
+altamente sensibles). Documentar epsilon en datasheets.
+Liberar estadisticas con differential privacy y limites de presupuesto.
+
+D. ZK tooling y trusted setup
+
+Usaria circom/snarkjs para una version prototipo. Para versiones mas serias, utilizaria
+arkworks/halo 2.
+
+E. CI/CD y SBOM
+
+Reproducible builds, signing artedacts con keys del proyecto
+(GPG) y publicar SBOM (CycloneDX) en el bulletin board.
+
+F. Retenciones 
+
+Logs de auditoria firmados: 10 años (para fines forenses/elecorales).
+
+Ciphertexts deboletas: conservar 1-5 años (legal/regulatorio) pero
+mantener politicas de acceso restringido.
+
+Credenciales de elegibilidad (VC): expiran cada eleccion o
+cada X años (Por ejemplo: cada 2 años).
