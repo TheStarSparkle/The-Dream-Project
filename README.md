@@ -41,7 +41,7 @@ la transparencia y confianza: no depende de politicos individuales
 que puedan corromperse o que tengan malas intenciones desde el inicio.
 
 Velocidad y eficiencia: Las IAs pueden procesar datos y encontrar
-soluciones de forma mucho mas rapida que los humanos solos.
+soluciones de forma mucho mas rapida que los humanos solos. (Para dar un ejemplo: AI Economist, creada por Salesforce Research, uso entornos simulados para probar como diferentes politicas economicas afectan productividad, desigualdad y bienestar social, en los experimentos que hicieron, las IAs diseñaron sistemas impositivos que lograron un mejor balance entre equidad y eficiencia que los propuestos por economistas humanos, estos experimentos demuestran que las IAs pueden explorar escenarios complejos a gran escala, detectar dinamicas ocultas que los humanos no siempre ven y proponer politicas mas optimas basadas en simulaciones de miles de variables. Las limitaciones de este ejemplo es que esto fue probado en escenarios simulados, mientras que este sistema apunta al mundo real, donde hay caos, incertidumbre, impredicibilidad, factores culturales, ademas de que este ejemplo aun no probo la integración en sistemas de gobernanza descentralizados, asi que esto es evidencia experimental).
 
 La participacion informada: todos entienden por lo que estan votando
 gracias a explicaciones sencillas y accecibles.
