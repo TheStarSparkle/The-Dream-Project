@@ -22,7 +22,7 @@ riesgo de que el voto no se puede alterar ni manipular.
 Cada IA estaria especializada en un area (salud, economia, seguridad,
 educacion, medio ambiente, salud mental, etc). Estas IAs
 ayudarian a tomar decisiones practicas basadas en datos reales
-y actualizaods (Por ejemplo: Sensores de calidad del aire, estadisticas de
+y actualizados (Por ejemplo: Sensores de calidad del aire, estadisticas de
 consumo energetico, encuestas ciudadanas).
 
 Si una IA se desvia de las reglas eticas establecidas, de sus lineamentos,
@@ -53,7 +53,7 @@ Flexibilidad ideologica: puedes votar por ideologias completas o
 por una fusion de lo mejor de cada una.
 
 Hoy (año 2025) la tecnologia no esta lo suficientemente madura.
-Pero en 10-15 años, la tecnologia, las inteligencias artificiales y la informatica
+Pero en 10 años, la tecnologia, las inteligencias artificiales y la informatica
 estaran lo suficientemente avanzadas como para que este sistema sea algo
 realista y viable. Por eso mismo "The Dream Project" es una vision a largo
 plazo, que esta pensada para implementarse cuando la tecnologia y la sociedad
