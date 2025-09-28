@@ -1,7 +1,7 @@
 # The-Dream-Project
 The Dream Project es un proyecto que propone un nuevo sistema politico que combina lo mejor de la tecnologia y lo mejor  de los valores democraticos.
 La idea es que la administracion y
-coordinacion diaria del Estado (economia, salud, seguridad,
+coordinacion diaria del Estado (economía, salud, salud mental,
 medio ambiente, etc.) este apoyada por inteligencias
 artificiales especializadas en eso, mientras que las decisiones 
 morales, eticas, y diplomaticas sigan siempre en manos de seres
