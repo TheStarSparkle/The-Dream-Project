@@ -117,4 +117,6 @@ cliente, smart contracts y pruebas; fomentar red-teaming publico y bug bounties.
 
 Pruebas: Simulaciones digitales donde se ponga en escenarios extremos a este sistema, 
 hasta que el sistema falle, despues ver que salio mal, y arreglarlo 
-o al menos hacer un plan de contigencia.
+o al menos hacer un playbook de contingencia. (Definición de playbook: Es un conjunto de estrategias, 
+guías, procesos y tácticas en un contexto especifico).
+
