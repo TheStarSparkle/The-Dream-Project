@@ -108,7 +108,12 @@ Requiere auditorias abiertas y codigo verificable.
 
 Anti-Sybil: Emision de VC por autoridad + limites de emision en 
 el ledger; empezar pruebas de elegibilidad off-chain 
-y verifficacion ZK on-chain.
+y verifficacion ZK on-chain. (Definición de verifficacion ZK on-chain: es un proceso criptográfico en el que un contrato 
+inteligente en la cadena de bloques verifica una prueba de conocimiento cero, certificando la veracidad de una computación o transacción realizada fuera de la cadena,  
+sin revelar ningún dato sensible sobre esa computación. Definición de pruebas de elegibilidad
+off-chain: la verificación de que alguien cumple con ciertos requisitos para acceder a algo (como un producto, servicio o evento), pero esta verificación se realiza fuera de la blockchain principal (off-chain), en lugar de hacerlo directamente en la cadena de bloques. Esto puede implicar el uso de sistemas centralizados 
+o externos para la validación de identidad. Definición de Sybil en ciberseguridad: un atacante puede contaminar un sistema distribuido creando un gran número de identidades que aparenten ser independientes y usarlas para obtener una influencia desproporcionada, 
+alterar rutas o modificar contenido almacenado).
 
 Coercion Resistance: Ofrecer ventanas de revote y siseño sin recibos comprobables a terceros; politicas legales y campañas educativas.
 
